@@ -1,0 +1,6 @@
+tr>td.esd-mp-zone-block.esd-activated > .esd-block-btn,
+tr>td.esd-mp-zone-block.esd-active > .esd-block-btn,
+tr>td.esd-mp-zone-block.esd-activated > .esd-structure-type,
+tr>td.esd-mp-zone-block.esd-active > .esd-structure-type {
+    background: #666666;
+}
