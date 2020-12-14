@@ -28,140 +28,138 @@
       background-color: #7c1a87;
       flex-direction: row;
     }
-}
-
-</style>
+  </style>
   <script type="text/javascript" src="https://plugins.stripo.email/static/latest/stripo.js"></script>
 
   <script type="text/javascript">
-      var inputHTML = "";
-      var inputCSS = "";
-      function loadHTMLtoString(htmlFile) {
-        const reader = new FileReader();
-        reader.addEventListener('load', (event) => {
-          inputHTML = event.target.result;
-          loadStripo();
-        });
-        reader.readAsText(htmlFile);
-      }
+    var inputHTML = "";
+    var inputCSS = "";
+    function loadHTMLtoString(htmlFile) {
+      const reader = new FileReader();
+      reader.addEventListener('load', (event) => {
+        inputHTML = event.target.result;
+        loadStripo();
+      });
+      reader.readAsText(htmlFile);
+    }
 
-      function loadStripo() {
-        window.Stripo.init({
-          settingsId: 'stripoSettingsContainer',
-          previewId: 'stripoPreviewContainer',
-          codeEditorButtonId: 'btnShowEditor',
-          undoButtonId:'btnUndo',
-          redoButtonId:'btnRedo',
-          html: inputHTML,
-          css: inputCSS,
-          apiRequestData: {
-            emailId: '8675309'
-          },
-          mergeTags: [
+    function loadStripo() {
+      window.Stripo.init({
+        settingsId: 'stripoSettingsContainer',
+        previewId: 'stripoPreviewContainer',
+        codeEditorButtonId: 'btnShowEditor',
+        undoButtonId:'btnUndo',
+        redoButtonId:'btnRedo',
+        html: inputHTML,
+        css: inputCSS,
+        apiRequestData: {
+          emailId: '8675309'
+        },
+        mergeTags: [
           {
             "category": "Messagepoint",
             "entries": [
-                {
-                    "label": "First Name",
-                    "value": "*|FNAME|*"
-                }
+              {
+                "label": "First Name",
+                "value": "*|FNAME|*"
+              }
             ]
-        }
-      ],
-          getAuthToken: function(callback) {
-            var baseRestURL = "https://plugins.stripo.email/api/v1/auth";
-            var pluginID = "ce08b1e6d823407d845498847a310570";
-            var secretKey = "618119ec8ab04e2c8f02f7c187304be4";
-				    var role="ADMIN";
-            var method = "POST";
-            var postData = "{\"pluginId\": \"" + pluginID + "\",\"secretKey\": \"" + secretKey + "\",\"role\":\"" + role + "\"}";
-            var async = true;
-            var request = new XMLHttpRequest();
-            request.onload = function() {
-              var status = request.status; // HTTP response status, e.g., 200 for "200 OK"
-              console.log("Authenticated to the Stripo Plugin - Click to Continue");
-						  var jsonResponse = JSON.parse(request.responseText);
-						  var token = jsonResponse.token;
-              return callback(token);
-            }
-            request.open(method, baseRestURL, async);
-            request.setRequestHeader("Content-Type", "application/json");
-            request.setRequestHeader("Accept", "application/json");
-            request.send(postData);
-          },
-          "extensions": [
-            {
-              "globalName": "MpZoneBlockExtension",
-              "url":"http://localhost:8000/extension-mpzone/dist/main.latest.extension.js"
-            }
-          ]
-        });
-      }
+          }
+        ],
+        getAuthToken: function(callback) {
+          var baseRestURL = "https://plugins.stripo.email/api/v1/auth";
+          var pluginID = "ce08b1e6d823407d845498847a310570";
+          var secretKey = "618119ec8ab04e2c8f02f7c187304be4";
+          var role="ADMIN";
+          var method = "POST";
+          var postData = "{\"pluginId\": \"" + pluginID + "\",\"secretKey\": \"" + secretKey + "\",\"role\":\"" + role + "\"}";
+          var async = true;
+          var request = new XMLHttpRequest();
+          request.onload = function() {
+            var status = request.status; // HTTP response status, e.g., 200 for "200 OK"
+            console.log("Authenticated to the Stripo Plugin - Click to Continue");
+            var jsonResponse = JSON.parse(request.responseText);
+            var token = jsonResponse.token;
+            return callback(token);
+          }
+          request.open(method, baseRestURL, async);
+          request.setRequestHeader("Content-Type", "application/json");
+          request.setRequestHeader("Accept", "application/json");
+          request.send(postData);
+        },
+        "extensions": [
+          {
+            "globalName": "MpZoneBlockExtension",
+            "url":"http://localhost:8000/extension-mpzone/dist/main.latest.extension.js"
+          }
+        ]
+      });
+    }
 
-      // Function to download data to a file
-      function downloadTemplate() {
-        window.StripoApi.getTemplate( (html, css) => {
-          var file = new Blob([html], {type: 'text/html'});
-          var a = document.createElement("a"), url = URL.createObjectURL(file);
-          a.href = url;
-          a.download = 'StripoSavedTemplate.html';
-          document.body.appendChild(a);
-          a.click();
-          window.StripoApi.stop(); //close Stripo
-          setTimeout(function() {
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-          }, 0);
-        });
+    // Function to download data to a file
+    function downloadTemplate() {
+      window.StripoApi.getTemplate( (html, css) => {
+        var file = new Blob([html], {type: 'text/html'});
+        var a = document.createElement("a"), url = URL.createObjectURL(file);
+        a.href = url;
+        a.download = 'StripoSavedTemplate.html';
+        document.body.appendChild(a);
+        a.click();
+        window.StripoApi.stop(); //close Stripo
+        setTimeout(function() {
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, 0);
+      });
 
     }
 
-   </script>
+  </script>
 </head>
 <body>
-  <table width="100%">
-    <tr>
-      <td class="header-content" style="text-align:left;" width="20%">
-        <a id="homeButton" href="http://messagepoint.com" data-toggle="tooltip" data-html="true" title="" data-original-title="Back to home page">
-          <img style="display:block;" id="base64image"
-            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAADsklEQVRogdWazYscVRRHz2sdM0KU6GB0GPELMxFdREEx4EpXutFoFo66MIIkQkwC+QsUN4rERDdGBBcGEgQ3rkQQxY2TURNduJgwUTcKxjhEkxmJJunjorozNUV11evqqvk4u66+993f7Vf93q37KlAD6k3AI8CDwF3AHcAIsLZjMgfMAj8D08BR4MsQwu91xK+EOqLuVr+1Ot+ou9SRpRR+s3pAnR9AeJY5db861qTwIXWPeq5G4Vnm1VfUNXWL36j+0KDwLN+r43WJ32qzv3ovzqpPDip+m3phGcR3uai+VFX8jmUUnmVXv+K3mmS/UriobsnTGnLE3wkcA66tNHXNMQc8EEKYTl9spT+oVwEfs/LEQ7KrH1aH0hdbGaO9wKaCQZ4H5msWluY8sKPg+/uAPbnfqGMmO2JPOnb3qD82cJ/PqJs6MYo4p47mJXCgLELKdlh9e3DNl/lEXZcav4x9WfEjRtQ2OUk/a7LhVOU/da8aMuOWMWe6ADSpKkvpcevdpk5WEP+r+lCPMWPYmXaIKonzgnX816jvqO3I4J+r6wvGi2GqazwaG7hXwFTgJ9TZgiHa6uvqFSXjxNBWb0R9JtKhNIFO8FvVr3Pc/1Qfi/CfiNWjPo19rCYxCXREDKlvuDCzU+otJT7D6rt9iFfdj/pZ3QmkRD2qvmmywxfZjZs8A/TLp6g/NZVAZJITVl+KZ1rAutIoxQLG1Lsr+A2rB4EjwDUVw1+H+u8gM6Deq/6j5tco+T4brHbLZDlfVwJdPlTX5tml7J9Sz9Qg/nICRet2vwmoTtspyjJ2dddPqqdbwJnYqY9kIzCpbk+JHyfpxu2uOdZfLeBkzYMCXA28px5RXwC+o/g5oyozLeBEAwN3mQA+oPoqU8aJFsnUrlYmW8AXQCObVMMIfNUKIZwiuUdXG1MhhFPdh/pDy6Eg9CDS/RAsdCUO02y3oW7mgY+gk0AIYRZ4fzkV9cnBjuYFjGyrZMnZiaPppa7E7azJkRaQamyFEH4DXhv8x2mcV9Nna9l2xhAwRdIBW4kcBzaHEC50L6y25u79IYRFlUO2N0oI4SSwDbi0NLqiuAQ8lxVfiLq96p+zZtrqi5XSdmUcMRV1q6OS2OJg/c+q/K0+PpD4VBIb1ONLKP6YyWJSH+qVJgfdTc5G96C7sI80aCKj6luW7Np9MqfuM7XDNo7JmcLL6lHju9Jp2iZt+Z3q9VV1xJauZcmsBx4GNpO8bnM7cAOLX7c5DfzC4tdt/hg09v+1XJZKgN5NwAAAAABJRU5ErkJggg==" />
-        </a>
-      </td>
-      <td class="header-content" width="80%">
-        <table width="100%">
-          <tr>
-            <td>
-              Choose HTML File: <input type="file" accept=".html" id="input-html-selector"/>
-              <script>
-                const fileSelector = document.getElementById('input-html-selector');
-                fileSelector.addEventListener('change', (event) => {
-                  const fileList = event.target.files;
-                  loadHTMLtoString(fileList[0]);
-                });
-              </script>
-            </td>
-            <td>
-              <button onclick="downloadTemplate()">Save File</button>
-            </td>
-            <td>Stripo Plugin Editor v 1.2</td>
-          </tr>
-          <tr>
-            <td>
-              <button id="btnShowEditor">Open Editor</button>
-            </td>
-            <td>
-              <button id="btnRedo">Redo Last</button>
-            </td>
-            <td>
-              <button id="btnUndo">Undo Last</button>
-            </td>
-          </tr>
-       </table>
-      </td>
-    </tr>
-    <tr>
+<table width="100%">
+  <tr>
+    <td class="header-content" style="text-align:left;" width="20%">
+      <a id="homeButton" href="http://messagepoint.com" data-toggle="tooltip" data-html="true" title="" data-original-title="Back to home page">
+        <img style="display:block;" id="base64image"
+             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAADsklEQVRogdWazYscVRRHz2sdM0KU6GB0GPELMxFdREEx4EpXutFoFo66MIIkQkwC+QsUN4rERDdGBBcGEgQ3rkQQxY2TURNduJgwUTcKxjhEkxmJJunjorozNUV11evqqvk4u66+993f7Vf93q37KlAD6k3AI8CDwF3AHcAIsLZjMgfMAj8D08BR4MsQwu91xK+EOqLuVr+1Ot+ou9SRpRR+s3pAnR9AeJY5db861qTwIXWPeq5G4Vnm1VfUNXWL36j+0KDwLN+r43WJ32qzv3ovzqpPDip+m3phGcR3uai+VFX8jmUUnmVXv+K3mmS/UriobsnTGnLE3wkcA66tNHXNMQc8EEKYTl9spT+oVwEfs/LEQ7KrH1aH0hdbGaO9wKaCQZ4H5msWluY8sKPg+/uAPbnfqGMmO2JPOnb3qD82cJ/PqJs6MYo4p47mJXCgLELKdlh9e3DNl/lEXZcav4x9WfEjRtQ2OUk/a7LhVOU/da8aMuOWMWe6ADSpKkvpcevdpk5WEP+r+lCPMWPYmXaIKonzgnX816jvqO3I4J+r6wvGi2GqazwaG7hXwFTgJ9TZgiHa6uvqFSXjxNBWb0R9JtKhNIFO8FvVr3Pc/1Qfi/CfiNWjPo19rCYxCXREDKlvuDCzU+otJT7D6rt9iFfdj/pZ3QmkRD2qvmmywxfZjZs8A/TLp6g/NZVAZJITVl+KZ1rAutIoxQLG1Lsr+A2rB4EjwDUVw1+H+u8gM6Deq/6j5tco+T4brHbLZDlfVwJdPlTX5tml7J9Sz9Qg/nICRet2vwmoTtspyjJ2dddPqqdbwJnYqY9kIzCpbk+JHyfpxu2uOdZfLeBkzYMCXA28px5RXwC+o/g5oyozLeBEAwN3mQA+oPoqU8aJFsnUrlYmW8AXQCObVMMIfNUKIZwiuUdXG1MhhFPdh/pDy6Eg9CDS/RAsdCUO02y3oW7mgY+gk0AIYRZ4fzkV9cnBjuYFjGyrZMnZiaPppa7E7azJkRaQamyFEH4DXhv8x2mcV9Nna9l2xhAwRdIBW4kcBzaHEC50L6y25u79IYRFlUO2N0oI4SSwDbi0NLqiuAQ8lxVfiLq96p+zZtrqi5XSdmUcMRV1q6OS2OJg/c+q/K0+PpD4VBIb1ONLKP6YyWJSH+qVJgfdTc5G96C7sI80aCKj6luW7Np9MqfuM7XDNo7JmcLL6lHju9Jp2iZt+Z3q9VV1xJauZcmsBx4GNpO8bnM7cAOLX7c5DfzC4tdt/hg09v+1XJZKgN5NwAAAAABJRU5ErkJggg==" />
+      </a>
+    </td>
+    <td class="header-content" width="80%">
+      <table width="100%">
+        <tr>
+          <td>
+            Choose HTML File: <input type="file" accept=".html" id="input-html-selector"/>
+            <script>
+              const fileSelector = document.getElementById('input-html-selector');
+              fileSelector.addEventListener('change', (event) => {
+                const fileList = event.target.files;
+                loadHTMLtoString(fileList[0]);
+              });
+            </script>
+          </td>
+          <td>
+            <button onclick="downloadTemplate()">Save File</button>
+          </td>
+          <td>Stripo Plugin Editor v 1.2</td>
+        </tr>
+        <tr>
+          <td>
+            <button id="btnShowEditor">Open Editor</button>
+          </td>
+          <td>
+            <button id="btnRedo">Redo Last</button>
+          </td>
+          <td>
+            <button id="btnUndo">Undo Last</button>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
     <td style="vertical-align:top;">
-      <div style="max-height:80%;" id="stripoSettingsContainer"></div>
+      <div style="max-height:80%;min-width:250px;" id="stripoSettingsContainer"></div>
     </td>
     <td style="vertical-align:top;">
       <div style="max-height:80%;" id="stripoPreviewContainer"></div>
@@ -169,10 +167,10 @@
   </tr>
   <tr>
     <td class="footer-content">
-        <b> Copyright © 2006-2020 Messagepoint All rights reserved. Privacy</b>
+      <b> Copyright © 2006-2020 Messagepoint All rights reserved. Privacy</b>
     </td>
     <td class="footer-content" style="text-align:right;">
-        <b>messagepoint<sup>®</sup> (20.1.0.023)</b>
+      <b>messagepoint<sup>®</sup> (20.1.0.023)</b>
     </td>
   </tr>
 </body>
