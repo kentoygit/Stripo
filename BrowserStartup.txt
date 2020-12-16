@@ -1,0 +1,7 @@
+config in /usr/local/etc/nginx
+
+run in /Users/ken.toy
+
+sudo brew services restart nginx
+
+browse to localhost:8000
