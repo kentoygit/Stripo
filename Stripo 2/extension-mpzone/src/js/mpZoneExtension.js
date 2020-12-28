@@ -1,10 +1,11 @@
 import {
+    BLOCK_IMG_MERGE_TAG,
+    BLOCK_NAME_MERGE_TAG,
     BLOCK_UNIQUE_CLASS_NAME,
-    BLOCK_UNIQUE_CLASS_LABEL,
-    CONTROL_NAME_ZONE_NAME_TEXT,
-    CONTROL_NAME_ZONE_WIDTH,
+    CONTROL_NAME_ZONE_ALIGN,
     CONTROL_NAME_ZONE_HEIGHT,
-    CONTROL_NAME_ZONE_ALIGN
+    CONTROL_NAME_ZONE_NAME_TEXT,
+    CONTROL_NAME_ZONE_WIDTH
 } from './const';
 import translations from './translations';
 import zoneNameControl from './controls/mpZoneNameControl';
@@ -17,7 +18,9 @@ import defaultLayout from './layout/layout.html';
 export function createMpZoneExtension(stripoConfig, stripoApi, extensionBasePath) {
     function getBlockLayoutToDrop() {
         console.log("getBlockLayoutToDrop");
-        return defaultLayout.replace(/#IMAGE_BASE_PATH#/g, extensionBasePath);
+        return defaultLayout
+            .replace(/#IMAGE_BASE_PATH#/g, extensionBasePath)
+            .replace(/#DEFAULT_BLOCK_TEXT#/g, stripoApi.translate('block.default.text'));
     }
 
     function getBlockLabel(block) {
@@ -26,46 +29,18 @@ export function createMpZoneExtension(stripoConfig, stripoApi, extensionBasePath
     }
 
     function emailInitialized(emailBody) {
-        console.log("jobName Start Here");
         emailBody.find(`.${BLOCK_UNIQUE_CLASS_NAME}`).each(function() {
             const block = stripoApi.jQuery(this);
-            var zoneName = block.find("img").attr("alt");
-            if (!zoneName) zoneName = "MP Zone Name";
-            var zoneWidth = block.find("img").attr("width");
-            if (!zoneWidth) zoneWidth = "100";
-            var zoneHeight = block.find("img").attr("height");
-            if (!zoneHeight) zoneHeight = "100";
-            var zoneAlign = block.attr("align");
-            console.log(zoneAlign);
-            if (!zoneAlign) zoneAlign = "center";
-            console.log("jobName: " + zoneName + " " + zoneWidth + " " + zoneHeight + " " + zoneAlign);
-            block.html(defaultLayout.replace(/#IMAGE_BASE_PATH#/g, extensionBasePath));
-            //console.log("Default Template: " + defaultLayout);
-            block.find("img").attr("alt", zoneName);
-            block.find("table").attr("width", zoneWidth);                               //REPLACE THIS HERE
-            block.find("table").attr("height", zoneHeight);                             //HEIGHT
-            block.find("table").attr("align", zoneAlign);                               //NEED THE SPACING AS WELL, OR ALIGNMENT INSTEAD?
-            block.attr("align", "");
-//        block.find("img").attr("style", "background-color:#7c1a87;");
-            block.find("span").html(zoneName);
+            block.find('img').attr('src', extensionBasePath + '/assets/images/MPLogo.png');
+            block.find('span').html(stripoApi.translate('block.default.text'));
         });
     }
 
     function onCleanLayout(bodyCheerioWrapper, cheerio) {
-        console.log("onCleanLayout");
         bodyCheerioWrapper.find(`.${BLOCK_UNIQUE_CLASS_NAME}`).each(function() {
             const blockWrapper = cheerio(this, null, null, {decodeEntities: false});
-            var zoneName = blockWrapper.find("img").attr("alt");
-            if (zoneName)
-            {
-                console.log("onClean " + zoneName);
-                const zoneWidth = blockWrapper.find("table").attr("width");
-                const zoneHeight = blockWrapper.find("table").attr("height");
-                const zoneAlign = blockWrapper.find("table").attr("align");
-                //blockWrapper.find(`.${BLOCK_UNIQUE_CLASS_LABEL}`).find("span").html(zoneName);
-                blockWrapper.attr("align", zoneAlign);
-                blockWrapper.html("<img src=\"https://images/messagepoint_zone.gif\" width=\"" + zoneWidth + "\" height=\"" + zoneHeight + "\" alt=\"" + zoneName + "\"title=\"" + zoneName + "\" >");
-            }
+            blockWrapper.find('img').attr('src', BLOCK_IMG_MERGE_TAG);
+            blockWrapper.find('span').html(BLOCK_NAME_MERGE_TAG);
         });
     }
 
